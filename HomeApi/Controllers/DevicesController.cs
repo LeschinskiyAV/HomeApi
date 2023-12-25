@@ -44,9 +44,21 @@ namespace HomeApi.Controllers
             
             return StatusCode(200, resp);
         }
-        
-        // TODO: Задание: напишите запрос на удаление устройства
-        
+
+
+        [HttpDelete]
+        [Route("{id}")]
+        public async Task<IActionResult> Delete([FromRoute] Guid id)
+        {
+            var device = await _devices.GetDeviceById(id);
+            if (device == null)
+                return StatusCode(400, $"Устройство с id {id} отсутствует в базе!");
+
+            await _devices.DeleteDevice(device);
+
+            return StatusCode(200, $"Устройство {device.Name} удалено.");
+        }
+
         /// <summary>
         /// Добавление нового устройства
         /// </summary>
